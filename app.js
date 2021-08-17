@@ -4,15 +4,24 @@ const socketIO = require('socket.io');
 const qrcode = require('qrcode');
 const http = require('http');
 const fs = require('fs');
-const axios = require('axios').default;
+const axios = require('axios');
 const { body, validationResult } = require('express-validator');
 const { response } = require('express');
 const fileUpload = require('express-fileupload');
-const { phoneNumberFormatter } = require('./helpers/formatter')
+const { phoneNumberFormatter } = require('./helpers/formatter');
+const db = require('./helpers/mysqldb');
+const api = require('./helpers/api');
+const port = process.env.PORT || 3002;
+const host = process.env.HOST ||"0.0.0.0";
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
+// const io = socketIO(server);
+const io = socketIO(server, {
+  cors: {
+    origin: '*',
+  }
+});
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true }));
@@ -52,12 +61,9 @@ client.on('auth_failure', msg => {
     console.error('AUTHENTICATION FAILURE', msg);
 });
 
-client.on('message', msg => {
-    if (msg.body == '!ping') {
-        msg.reply('pong');
-    }else if (msg.body == 'pagi') {
-        msg.reply('selamat pagi');
-    }
+client.on('message', async msg => {
+    const phone = (await msg.getContact()).number;
+    await api.sendToInbox(phone, msg.body);
 });
 
 
@@ -89,12 +95,12 @@ io.on('connection', function(socket){
 
     client.on('ready', () => {
         socket.emit('message', 'Whatsapp Is Ready');
+        console.log('Ready');
     });
 });
 
 const checkRegisteredNumber = async function(number) {
-    const isRegistered = await client.isRegisteredUser(number);
-    return isRegistered;
+    return await client.isRegisteredUser(number);
 }
 
 //send message Text
@@ -159,6 +165,6 @@ app.post('/send-media-local', async (req, res) => {
 
 
 
-server.listen(8000,function(){
-    console.log("Running 8000");
-});
+server.listen(port, host, () =>
+    console.log(`listening at http://${host}:${port}`)
+);

@@ -19,9 +19,16 @@
     "express-fileupload": "^1.2.0",
     "express-validator": "^6.8.0",
     "http": "0.0.1-security",
+    "mysql2": "^2.2.5",
     "qrcode": "^1.4.4",
     "qrcode-terminal": "^0.12.0",
     "socket.io": "^3.0.4",
-    "whatsapp-web.js": "^1.11.1"
+    "whatsapp-web.js": "latest"
+  },
+  "engines": {
+    "node": "v12.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
   }
 }
