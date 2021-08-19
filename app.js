@@ -11,7 +11,7 @@ const fileUpload = require('express-fileupload');
 const { phoneNumberFormatter } = require('./helpers/formatter');
 const db = require('./helpers/mysqldb');
 const api = require('./helpers/api');
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3000;
 const host = process.env.HOST ||"0.0.0.0";
 
 const app = express();
