@@ -1,8 +1,8 @@
 const axios = require('axios')
-
+const url_gui = process.env.gui || 'http://app';
 const sendToInbox = async (sender, message) =>{
     axios
-        .post('http://localhost:8000/api/whatsapp/inbox', {
+        .post(url_gui+'/api/whatsapp/inbox', {
             'sender': sender,
             'message': message
         })
