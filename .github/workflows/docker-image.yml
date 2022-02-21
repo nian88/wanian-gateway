@@ -21,7 +21,7 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag wanian-gate:$(date +%s)
+      run: docker build . --file Dockerfile --tag niandev/wanian-gate:$(date +%s)
       
     - name: Docker Push
       run: docker push niandev/wanian-gate
