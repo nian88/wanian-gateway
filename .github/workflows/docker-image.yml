@@ -24,4 +24,4 @@ jobs:
       run: docker build . --file Dockerfile --tag wanian-gate:$(date +%s)
       
     - name: Docker Push
-      run: docker push ${{secrets.DOCKER_USER}}/wanian-gate
+      run: docker push niandev/wanian-gate
