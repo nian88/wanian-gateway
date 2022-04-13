@@ -18,12 +18,11 @@ jobs:
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-        IMAGE_VERSION: $(date + %s)
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: Get current date
       id: date
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
+      run: echo "::set-output name=date::$(date +'%s')"
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/wanian:${{ steps.date.outputs.date }}
 
