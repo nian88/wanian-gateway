@@ -18,10 +18,11 @@ jobs:
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        IMAGE_VERSION: $(date + %s)
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/wanian
+      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/wanian:${{secrets.IMAGE_VERSION}}
 
     - name: Docker Push
-      run: docker push ${{secrets.DOCKER_USER}}/wanian
+      run: docker push ${{secrets.DOCKER_USER}}/wanian:${{secrets.IMAGE_VERSION}}
