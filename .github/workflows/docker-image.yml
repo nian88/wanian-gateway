@@ -24,7 +24,7 @@ jobs:
       id: date
       run: echo "::set-output name=date::$(date +'%s')"
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/wanian:${{ steps.date.outputs.date }}
+      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/wanian:${GITHUB_REF##*/}-${{ steps.date.outputs.date }}
 
     - name: Docker Push
-      run: docker push ${{secrets.DOCKER_USER}}/wanian:${{ steps.date.outputs.date }}
+      run: docker push ${{secrets.DOCKER_USER}}/wanian:${GITHUB_REF##*/}-${{ steps.date.outputs.date }}
