@@ -20,7 +20,8 @@ const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
     origin: '*',
-  }
+  },
+  allowEIO3: true
 });
 
 app.use(express.json());
