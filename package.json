@@ -1,6 +1,6 @@
 {
   "name": "whatsapp-gateway",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Whatsapp Gateway by Niandev",
   "main": "app.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "whatsapp-web.js": "latest"
   },
   "engines": {
-    "node": "v14.17.3"
+    "node": "v16.18.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
