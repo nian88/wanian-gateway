@@ -1,4 +1,4 @@
-FROM node:18.12.1-alpine
+FROM node:alpine
 
 RUN apt-get update \
     && apt-get install -y wget gnupg \
