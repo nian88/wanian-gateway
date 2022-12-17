@@ -1,5 +1,8 @@
 FROM node:16
 
+WORKDIR /app
+COPY package.json ./
+
 RUN apt-get update \
     && apt-get install -y wget gnupg \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -14,10 +17,6 @@ RUN npm i puppeteer \
     && mkdir -p /home/pptruser/Downloads \
     && chown -R pptruser:pptruser /home/pptruser \
     && chown -R pptruser:pptruser /node_modules
-
-
-WORKDIR /app
-COPY package.json ./
 
 RUN npm install
 RUN npm i -g nodemon
