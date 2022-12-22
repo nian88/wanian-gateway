@@ -17,13 +17,13 @@ COPY . .
 RUN npm install
 RUN npm i -g nodemon
 
-RUN ls -lah
+RUN pwd && ls -lah
 
 RUN npm i puppeteer \
     && groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
     && mkdir -p /home/pptruser/Downloads \
     && chown -R pptruser:pptruser /home/pptruser \
-    && chown -R pptruser:pptruser /node_modules
+    && chown -R pptruser:pptruser /app/node_modules
 
 EXPOSE 3000
 CMD ["nodemon","app.js"]
