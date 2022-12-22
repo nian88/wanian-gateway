@@ -12,6 +12,11 @@ RUN apt-get update \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
     
+COPY . .
+
+RUN npm install
+RUN npm i -g nodemon
+
 RUN ls -lah
 
 RUN npm i puppeteer \
@@ -19,11 +24,6 @@ RUN npm i puppeteer \
     && mkdir -p /home/pptruser/Downloads \
     && chown -R pptruser:pptruser /home/pptruser \
     && chown -R pptruser:pptruser /node_modules
-
-RUN npm install
-RUN npm i -g nodemon
-
-COPY . .
 
 EXPOSE 3000
 CMD ["nodemon","app.js"]
