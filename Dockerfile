@@ -14,7 +14,7 @@ RUN apt-get update \
 
 COPY . .
 
-RUN npm install --production
+RUN npm install
 RUN npm i -g nodemon
 
 RUN pwd && ls -lah
