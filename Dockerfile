@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:16.18.1-alpine
 
 WORKDIR /app
 COPY package.json ./
@@ -11,10 +11,10 @@ RUN apt-get update \
     && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
       --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
-    
+
 COPY . .
 
-RUN npm install
+RUN npm install --production
 RUN npm i -g nodemon
 
 RUN pwd && ls -lah

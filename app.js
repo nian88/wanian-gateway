@@ -9,6 +9,8 @@ const { phoneNumberFormatter } = require('./helpers/formatter');
 const fileUpload = require('express-fileupload');
 const axios = require('axios');
 const mime = require('mime-types');
+const parsePhoneNumber = require('libphonenumber-js');
+
 //
 //const db = require('./helpers/mysqldb');
 //const api = require('./helpers/api');
@@ -23,6 +25,8 @@ const io = socketIO(server, {
   },
   allowEIO3: true
 });
+
+var isReady = false;
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true }));
@@ -57,6 +61,7 @@ client.initialize();
 //koneksi ke socket IO
 io.on('connection', function(socket){
     socket.emit('message', 'connecting...');
+    isReady = false;
 
     client.on('qr', (qr) => {
         qrcode.toDataURL(qr,(err, url)=>{
@@ -68,6 +73,7 @@ io.on('connection', function(socket){
     client.on('ready', () => {
         socket.emit('message', 'Whatsapp Is Ready');
         console.log('Ready');
+        isReady = true;
     });
 
     client.on('authenticated', () => {
@@ -77,11 +83,13 @@ io.on('connection', function(socket){
     });
 
     client.on('auth_failure', msg => {
+        isReady = false;
         console.error('AUTHENTICATION FAILURE', msg);
     });
 
     client.on('disconnected', (reason) => {
         socket.emit('message', 'Whatsapp is disconnected!');
+        isReady = false;
         console.error('Disconnected', reason);
         client.destroy();
         client.initialize();
@@ -92,8 +100,46 @@ const checkRegisteredNumber = async function(number) {
     return await client.isRegisteredUser(number);
 }
 
+const checkValidatedNumber = async function(number) {
+    let validNumber = number.toString().replace(/\D/g, '');
+    return (validNumber.length <= 10)?false:true;
+}
+
 //send message Text
-app.post('/send-message', async (req, res) => {
+app.post('/send-message',[
+      body('number').notEmpty(),
+      body('message').notEmpty(),
+  ], async (req, res) => {
+
+    if(!isReady){
+        return res.status(422).json({
+          status: false,
+          message: 'Server Not Ready'
+        });
+    }
+
+    const errors = validationResult(req).formatWith(({
+        msg
+      }) => {
+        return msg;
+      });
+
+      if (!errors.isEmpty()) {
+        return res.status(422).json({
+          status: false,
+          message: errors.mapped()
+        });
+      }
+
+    const phoneNumber = parsePhoneNumber(req.body.number, 'ID');
+
+    if (!phoneNumber.isValid()){
+        return res.status(422).json({
+          status: false,
+          message: 'Number Not Valid'
+        });
+    }
+
     const number = phoneNumberFormatter(req.body.number);
     const message = req.body.message;
 
