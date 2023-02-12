@@ -100,11 +100,6 @@ const checkRegisteredNumber = async function(number) {
     return await client.isRegisteredUser(number);
 }
 
-const checkValidatedNumber = async function(number) {
-    let validNumber = number.toString().replace(/\D/g, '');
-    return (validNumber.length <= 10)?false:true;
-}
-
 //send message Text
 app.post('/send-message',[
       body('number').notEmpty(),
@@ -131,7 +126,16 @@ app.post('/send-message',[
         });
       }
 
-    const phoneNumber = parsePhoneNumber(req.body.number, 'ID');
+    const numberOnly = req.body.number.toString().replace(/\D/g, '');
+
+    if(numberOnly.length < 1){
+        return res.status(422).json({
+          status: false,
+          message: 'Number Not Valid'
+        });
+    }
+
+    const phoneNumber = parsePhoneNumber(numberOnly, 'ID');
 
     if (!phoneNumber.isValid()){
         return res.status(422).json({
