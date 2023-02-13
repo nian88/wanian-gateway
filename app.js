@@ -128,7 +128,7 @@ app.post('/send-message',[
 
     const numberOnly = req.body.number.toString().replace(/\D/g, '');
 
-    if(numberOnly.length < 1){
+    if(numberOnly.length < 8){
         return res.status(422).json({
           status: false,
           message: 'Number Not Valid'
