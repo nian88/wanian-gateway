@@ -25,5 +25,7 @@ RUN npm i puppeteer \
     && chown -R pptruser:pptruser /home/pptruser \
     && chown -R pptruser:pptruser /app/node_modules
 
+COPY Injected.js node_modules/whatsapp-web.js/src/util/
+
 EXPOSE 3000
 CMD ["nodemon","app.js"]
