@@ -61,7 +61,6 @@ client.initialize();
 //koneksi ke socket IO
 io.on('connection', function(socket){
     socket.emit('message', 'connecting...');
-    isReady = false;
 
     client.on('qr', (qr) => {
         qrcode.toDataURL(qr,(err, url)=>{
